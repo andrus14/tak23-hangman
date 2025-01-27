@@ -1,6 +1,7 @@
 const scoreSpan = document.getElementById('score');
 const guessedWordDiv = document.getElementById('word');
 const alphabetDiv = document.getElementById('alphabet');
+const resetButton = document.getElementById('reset');
 
 let score = 10;
 scoreSpan.innerText = score;
@@ -29,6 +30,10 @@ fetch('hangman.txt')
 
     guessedWordDiv.innerText = guessedWord.join('');
 
+});
+
+document.addEventListener('click', () => {
+    location.reload();
 });
 
 document.addEventListener('keydown', e => {
@@ -81,7 +86,7 @@ function testLetter ( letter ) {
                     guessedWord[i] = word[i];
                 }
 
-                guessedWordDiv.innerText = guessedWord.join('');
+                guessedWordDiv.innerText = guessedWord.join('').toUpperCase();
 
                 isCorrect = true;
 
@@ -94,15 +99,23 @@ function testLetter ( letter ) {
 
             }
 
+        } else {
+            if ( word.toLowerCase().includes(letter) ) {
+                isCorrect = true;
+            }
         }
 
+        const messageDiv = document.getElementById('message');
+        
         if ( !score ) {
     
-            console.log('Kaotasid, õige sõna:', word);
+            messageDiv.innerText = 'Kaotasid! Õige sõna: ' + word;
+            messageDiv.classList.add('winMessage');
             
         } else if ( !guessedWord.includes('_') ) {
-    
-            console.log('Võitsid mängu!');
+            
+            messageDiv.innerText = 'Võitsid mängu!';
+            messageDiv.classList.add('lostMessage');
     
         }
 
